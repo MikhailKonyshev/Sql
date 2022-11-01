@@ -7,26 +7,33 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoJDBCImpl extends Util implements UserDao {
+public class UserDaoJDBCImpl implements UserDao {
+
+    Connection connection = Util.getConnection();
 
     public UserDaoJDBCImpl() {
-
     }
 
     public void createUsersTable() {
 
         String sql = "CREATE TABLE IF NOT EXISTS User (ID BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,NAME VARCHAR(200), LASTNAME VARCHAR(200), AGE TINYINT)";
 
-        try (Connection connection = getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.executeUpdate();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                connection.rollback();
-            }
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.executeUpdate();
             connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } finally {
+            try {
+                if (connection != null) Util.getConnection().close();
+            } catch (SQLException ignoreThis) {
+            }
         }
     }
 
@@ -34,16 +41,21 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
 
         String sql = "DROP TABLE IF EXISTS User";
 
-        try (Connection connection = getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.executeUpdate();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                connection.rollback();
-            }
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.executeUpdate();
             connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } finally {
+            try {
+                if (connection != null) Util.getConnection().close();
+            } catch (SQLException ignoreThis) {
+            }
         }
     }
 
@@ -51,19 +63,24 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
 
         String sql = "INSERT INTO User (NAME, LASTNAME, AGE) VALUES(?, ?, ?)";
 
-        try (Connection connection = getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setString(1, name);
-                preparedStatement.setString(2, lastName);
-                preparedStatement.setInt(3, age);
-                preparedStatement.executeUpdate();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                connection.rollback();
-            }
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setInt(3, age);
+            preparedStatement.executeUpdate();
             connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } finally {
+            try {
+                if (connection != null) Util.getConnection().close();
+            } catch (SQLException ignoreThis) {
+            }
         }
     }
 
@@ -71,17 +88,22 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
 
         String sql = "DELETE FROM User WHERE ID = ?";
 
-        try (Connection connection = getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setLong(1, id);
-                preparedStatement.executeUpdate();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                connection.rollback();
-            }
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
             connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } finally {
+            try {
+                if (connection != null) Util.getConnection().close();
+            } catch (SQLException ignoreThis) {
+            }
         }
     }
 
@@ -91,27 +113,32 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
 
         String sql = "SELECT ID, NAME, LASTNAME, AGE FROM User";
 
-        try (Connection connection = getConnection()) {
-            try (Statement statement = connection.createStatement()) {
-                ResultSet resultSet = statement.executeQuery(sql);
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(sql);
 
-                while (resultSet.next()) {
-                    User user = new User();
-                    user.setId(resultSet.getLong("ID"));
-                    user.setName(resultSet.getString("NAME"));
-                    user.setLastName(resultSet.getString("LASTNAME"));
-                    user.setAge(resultSet.getByte("AGE"));
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getLong("ID"));
+                user.setName(resultSet.getString("NAME"));
+                user.setLastName(resultSet.getString("LASTNAME"));
+                user.setAge(resultSet.getByte("AGE"));
 
-                    userList.add(user);
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                connection.rollback();
+                userList.add(user);
+                connection.commit();
             }
-            connection.commit();
 
         } catch (SQLException e) {
             e.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        } finally {
+            try {
+                if (connection != null) Util.getConnection().close();
+            } catch (SQLException ignoreThis) {
+            }
         }
         return userList;
     }
@@ -119,18 +146,21 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     public void cleanUsersTable() {
 
         String sql = "TRUNCATE User";
-
-        try (Connection connection = getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.executeUpdate();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                connection.rollback();
-            }
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.executeUpdate();
             connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } finally {
+            try {
+                if (connection != null) Util.getConnection().close();
+            } catch (SQLException ignoreThis) {
+            }
         }
     }
-
 }
