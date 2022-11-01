@@ -5,6 +5,7 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.service.UserServiceImpl;
 import jm.task.core.jdbc.util.Util;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 public class Main {
@@ -36,6 +37,10 @@ public class Main {
 
         userService.cleanUsersTable();
         userService.dropUsersTable();
+
+        try (Connection connection = Util.getConnection()){
+            System.out.println("Connection close");
+        }
 
     }
 

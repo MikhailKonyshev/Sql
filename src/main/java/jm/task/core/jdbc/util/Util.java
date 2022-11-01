@@ -14,7 +14,6 @@ public class Util {
 
     public static Connection getConnection() {
         try {
-
             Class.forName(DRIVER);
             Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             connection.setAutoCommit(false);

@@ -29,11 +29,6 @@ public class UserDaoJDBCImpl implements UserDao {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        } finally {
-            try {
-                if (connection != null) Util.getConnection().close();
-            } catch (SQLException ignoreThis) {
-            }
         }
     }
 
@@ -50,11 +45,6 @@ public class UserDaoJDBCImpl implements UserDao {
                 connection.rollback();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
-            }
-        } finally {
-            try {
-                if (connection != null) Util.getConnection().close();
-            } catch (SQLException ignoreThis) {
             }
         }
     }
@@ -76,11 +66,6 @@ public class UserDaoJDBCImpl implements UserDao {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        } finally {
-            try {
-                if (connection != null) Util.getConnection().close();
-            } catch (SQLException ignoreThis) {
-            }
         }
     }
 
@@ -98,11 +83,6 @@ public class UserDaoJDBCImpl implements UserDao {
                 connection.rollback();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
-            }
-        } finally {
-            try {
-                if (connection != null) Util.getConnection().close();
-            } catch (SQLException ignoreThis) {
             }
         }
     }
@@ -134,11 +114,6 @@ public class UserDaoJDBCImpl implements UserDao {
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
-        } finally {
-            try {
-                if (connection != null) Util.getConnection().close();
-            } catch (SQLException ignoreThis) {
-            }
         }
         return userList;
     }
@@ -156,11 +131,7 @@ public class UserDaoJDBCImpl implements UserDao {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        } finally {
-            try {
-                if (connection != null) Util.getConnection().close();
-            } catch (SQLException ignoreThis) {
-            }
         }
     }
+
 }
