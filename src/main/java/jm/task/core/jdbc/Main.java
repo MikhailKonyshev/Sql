@@ -38,9 +38,7 @@ public class Main {
         userService.cleanUsersTable();
         userService.dropUsersTable();
 
-        try (Connection connection = Util.getConnection()){
-            System.out.println("Connection close");
-        }
+        Util.getConnection().close();
 
     }
 
