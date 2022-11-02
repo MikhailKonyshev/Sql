@@ -9,7 +9,9 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-    Connection connection = Util.getConnection();
+    public static Connection connection = Util.getConnection();
+
+
 
     public UserDaoJDBCImpl() {
     }
@@ -133,5 +135,4 @@ public class UserDaoJDBCImpl implements UserDao {
             }
         }
     }
-
 }
