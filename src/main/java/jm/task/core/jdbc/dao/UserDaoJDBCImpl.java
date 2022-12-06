@@ -11,8 +11,6 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public static Connection connection = Util.getConnection();
 
-
-
     public UserDaoJDBCImpl() {
     }
 
