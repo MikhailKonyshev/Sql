@@ -38,10 +38,13 @@ public class Main {
         String allUsers = userService.getAllUsers().toString();
         System.out.println(allUsers);
 
+
         userService.cleanUsersTable();
         userService.dropUsersTable();
 
-        Util.closeSessionFactory(UserDaoHibernateImpl.se);
+        Util.closeSessionFactory();
+
+        //Util.closeSessionFactory(UserDaoHibernateImpl.se);
 
     }
 

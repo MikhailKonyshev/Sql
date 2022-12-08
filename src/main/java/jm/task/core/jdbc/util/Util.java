@@ -68,8 +68,8 @@ public class Util {
         return connection;
     }
 
-    public static  void closeSessionFactory(SessionFactory sessionFactory){
-        sessionFactory.close();
+    public static  void closeSessionFactory(){
+        getSessionFactory().close();
     }
 
     public static void closeConnection(Connection connection){
